@@ -1,6 +1,6 @@
 @extends("components.layout")
 @section("component")
-@component("components.breadcrumb", ["breadcrumb" => $breadcrumb])
+@component("components.breadcrumbs", ["breadcrumbs" => $breadcrumbs])
 @endcomponent
 <div class="row">
     <div class="form-group my-3">
