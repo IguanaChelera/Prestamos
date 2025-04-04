@@ -30,7 +30,7 @@
         <td class = "text-center">{{$empleado->activo}}</td>
         <td class = "text-center"> 
             <a href = "{{url('/empleados/'.$empleado->id_empleado.'/puestos')}}" class = "btn btn-primary">Puestos</a>
-            <a href  = "{{url('/empleados/prestamos')}}" class = "btn btn-primary">Prestamos</a>
+            <a href  = "{{url('/empleados/'.$empleado->id_empleado.'/prestamos')}}" class = "btn btn-primary">Prestamos</a>
             <a href = "{{url('/catalogos/empleados/editar/'.$empleado->id_empleado)}}" class = "btn btn-primary">Modificar</a>
         </td>
     </tr>
