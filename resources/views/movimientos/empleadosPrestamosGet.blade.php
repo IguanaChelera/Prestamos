@@ -41,6 +41,8 @@
 </table>
 <script>
     // We create an interface to describe the data and how we can use the main text for a new application.
-    let table = new DataTable("#maintable", { paging: true, searching: true });
+    let table = new DataTable("#maintable", 
+    { paging: true, 
+    searching: true });
 </script>
 @endsection
