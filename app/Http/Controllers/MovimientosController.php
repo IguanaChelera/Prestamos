@@ -185,7 +185,7 @@ class MovimientosController extends Controller
     {
         $empleado = Empleado::find($id_empleado);
         $prestamos = Prestamo::where ("prestamo.fk_id_empleado", $id_empleado) -> get();
-        return view ('movimientos.empleadosPrestamosGet', 
+        return view ('movimientos/empleadosPrestamosGet', 
         [
             "empleado" => $empleado,
             "prestamos" => $prestamos,
