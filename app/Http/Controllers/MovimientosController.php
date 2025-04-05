@@ -104,14 +104,14 @@ class MovimientosController extends Controller
 
     public function abonosAgregarGet($id_prestamo): View
     {
-        $prestamo = Prestamo::join("empleado", "empleado.id_empleado", "=", "prestamo.id_empleado")
+        $prestamo = Prestamo::join("empleado", "empleado.id_empleado", "=", "prestamo.fk_id_empleado")
             ->where("id_prestamo", $id_prestamo)->first();
     
-        $abonos = Abono::where("abono.id_prestamo", $id_prestamo)->get();
+        $abonos = Abono::where("abono.fk_id_prestamo", $id_prestamo)->get();
         $num_abono = count($abonos) + 1;
     
         // Obtener el último abono registrado
-        $ultimo_abono = Abono::where("abono.id_prestamo", $id_prestamo)
+        $ultimo_abono = Abono::where("abono.fk_id_prestamo", $id_prestamo)
             ->orderBy("fecha", "desc")
             ->first();
     
@@ -181,18 +181,18 @@ class MovimientosController extends Controller
         return redirect("/prestamos/{$fk_id_prestamo}/abonos");
     }
 
-    public function empleadosPrestamosGet($id_empleado): View
+    public function empleadosPrestamosGet(Request $request, $id_empleado): View
     {
         $empleado = Empleado::find($id_empleado);
-        $prestamos = Prestamo::where ("prestamo.fk_id_empleado", $id_empleado) -> get();
-        return view ('movimientos/empleadosPrestamosGet', 
-        [
+
+        $prestamos = Prestamo::where("prestamo.fk_id_empleado", $id_empleado)->get();
+        return view('movimientos/empleadosPrestamosGet', [
             "empleado" => $empleado,
             "prestamos" => $prestamos,
             "breadcrumbs" => [
                 "Inicio" => url("/"),
-                "Prestamos" => url ("/movimientos/prestamos"),
+                "Prestamos" => url("/movimientos/prestamos")
             ]
-            ]);
-        }
+        ]);
+    }
 }

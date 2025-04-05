@@ -3,18 +3,26 @@
 
 <head>
     <!-- importar las librerías de bootstrap -->
-    <link rel="stylesheet" href={{ secure_asset('bootstrap-5.3.3-dist/css/bootstrap.min.css') }} />
+    <link rel="stylesheet" href="{{ URL::asset('bootstrap-5.3.3-dist/css/bootstrap.min.css') }}" />
+
     <!-- importar los archivos JavaScript de Bootstrap-->
-    <script src={{ secure_asset('bootstrap-5.3.3-dist/js/bootstrap.min.js') }}></script>
-    <!-- importar librerías de estilos y javascript de datatables para manipular tablas desde el
-navegador del usuario-->
-    <link href={{ secure_asset('DataTables/datatables.min.css')}} rel="stylesheet" />
-    <script src={{ secure_asset('DataTables/datatables.min.js')}}></script>
-    <link href={{URL::asset("assets/style.css")}} rel="stylesheet" />
+    <script src="{{ URL::asset('bootstrap-5.3.3-dist/js/bootstrap.min.js') }}"></script>
+
+    <!-- importar jQuery (necesario para DataTables) -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <!-- importar librerías de estilos y javascript de datatables -->
+    <link href="{{ URL::asset('DataTables/datatables.min.css') }}" rel="stylesheet" />
+    <script src="{{ URL::asset('DataTables/datatables.min.js') }}"></script>
+
+    <!-- estilos personalizados -->
+    <link href="{{ URL::asset('assets/style.css') }}" rel="stylesheet" />
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Préstamos Coliman</title>
 </head>
+
 
 <body>
     <div class="row">
@@ -24,8 +32,7 @@ navegador del usuario-->
         </div>
         <div class="col-10">
             <div class="container">
-                @section("content")
-                @show
+                @yield("content")
             </div>
         </div>
     </div>

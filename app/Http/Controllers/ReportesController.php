@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Abono;
 use App\Models\Prestamo;
+use Illuminate\Support\Facades\DB;
 use DateTime;
 use Franczak\PowerData\Index;
 use Illuminate\Http\Request;
@@ -48,34 +49,37 @@ class ReportesController extends Controller
     }
 
     public function matrizAbonosGet(Request $request)
-{
-    $fecha_inicio = Carbon::now()->format("Y-01-01"); // "Carbon Fecha actual en formato de texto
-    $fecha_fin = $request->query("fecha_inicio", $fecha_inicio);
-    $fecha_inicio = Carbon::now()->format("Y-12-31"); // "Carbon Fecha actual en formato de texto
-    $fecha_fin = $request->query("fecha_fin", $fecha_fin);
-
-    $query = Abono::join("prestamo", "prestamo.id_prestamo", "=", "abono.fk_id_prestamo")
-        ->join("empleado", "empleado.id_empleado", "=", "prestamo.fk_id_empleado")
-        ->select("prestamo.id_prestamo", "empleado.nombre", "abono.monto_cobrado", "abono.fecha")
-        ->orderBy("abono.fecha");
-
-    $query->where("abono.fecha", ">=", $fecha_inicio);
-    $query->where("abono.fecha", "<=", $fecha_fin);
-
-    $abonos = $query->get()->toArray();
-
-    foreach ($abonos as &$abono) {
-        $abono["fecha"] = (new DateTime($abono["fecha"]))->format("Y-m");
+    {
+        $fecha_inicio = $request->query("fecha_inicio", Carbon::now()->format("Y-01-01"));
+        $fecha_fin = $request->query("fecha_fin", Carbon::now()->format("Y-12-31"));
+        
+        $abonos = Abono::join("prestamo", "prestamo.id_prestamo", "=", "abono.fk_id_prestamo")
+            ->join("empleado", "empleado.id_empleado", "=", "prestamo.fk_id_empleado")
+            ->select(
+                "prestamo.id_prestamo",
+                "empleado.nombre",
+                DB::raw("DATE_FORMAT(abono.fecha, '%Y-%m') AS fecha"),
+                DB::raw("(abono.monto_capital + abono.monto_interes) AS monto_cobrado")
+            )
+            
+            ->whereBetween("abono.fecha", [$fecha_inicio, $fecha_fin])
+            ->orderBy("abono.fecha")
+            ->get()
+            ->groupBy(['id_prestamo', 'fecha']);
+    
+        // Obtener todas las fechas únicas para garantizar consistencia
+        $fechasUnicas = collect($abonos->collapse()->keys())->unique()->sort()->values();
+    
+        return view("reportes.matrizAbonosGet", [
+            "abonos" => $abonos,
+            "fechas" => $fechasUnicas, // Pasamos las fechas ya procesadas
+            "fecha_inicio" => $fecha_inicio,
+            "fecha_fin" => $fecha_fin,
+            "breadcrumbs" => [
+                "Inicio" => url("/"),
+                "Reportes" => url("/reportes"),
+                "Matriz de Abonos" => ""
+            ]
+        ]);
     }
-
-    // var_dump($abonos);
-    $abonosIndex = new Index($abonos, ["id_prestamo", "fecha"]); // soportado por el complemento power-data
-    return view("/reportes/matrizAbonosGet", [
-        "abonosIndex" => $abonosIndex,
-        "fecha_inicio" => $fecha_inicio,
-        "fecha_fin" => $fecha_fin,
-        "breadcrumbs" => []
-    ]);
-}
-
 }

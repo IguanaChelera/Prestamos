@@ -13,7 +13,7 @@
             <a href='{{ url("/reportes/prestamos-activos") }}' class="btn-menu">Préstamos vigentes</a>
         </div>
         <div class="col-md-4">
-            <a href='{{ url("/reportes/prestamos-vencidos") }}' class="btn-menu">Resumen de abonos cobrados</a>
+            <a href='{{ url("/reportes/matriz-abonos") }}' class="btn-menu">Resumen de abonos cobrados</a>
         </div>
     </div>
 </div>
