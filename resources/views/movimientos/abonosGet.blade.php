@@ -1,92 +1,78 @@
-@extends("components.layout")
+@extends ("components.layout")
 @section("content")
-@component("components.breadcrumbs",["breadcrumbs"=>$breadcrumbs])
+@component("components.breadcrumbs", ["breadcrumbs" => $breadcrumbs])
 @endcomponent
+<h1>Abonos del Prestamo {{$prestamo->id_prestamo}}</h1>
 
-<div class="row my-4">
-    <div class="col">
-        <h1>Abonos del Préstamo {{$prestamo->id_prestamo}}</h1>
+<div class = "card">
+    <div class = "row card-body">
+        <div class = "col-2">Empleado</div>
+        <div class = "col">{{$prestamo->nombre}}</div>
     </div>
 
-    <div class="card p-4">
-        <div class="row">
-            <div class="col-md-6">
-                <strong>EMPLEADO</strong>
-                <p>{{ $prestamo->Empleado->nombre }}</p>
-            </div>
-            <div class="col-md-6">
-                <strong>ID PRÉSTAMO</strong>
-                <p>{{ $prestamo->id_prestamo }}</p>
-            </div>
-            <div class="col-md-6">
-                <strong>FECHA APROBACIÓN</strong>
-                <p>{{ $prestamo->fecha_aprob }}</p>
-            </div>
-            <div class="col-md-6">
-                <strong>MONTO PRESTADO</strong>
-                <p>{{ number_format($prestamo->monto, 2) }}</p>
-            </div>
-        </div>
-    </div>    
-</div>
-
-<div class="d-flex justify-content-between align-items-center my-3">
-    <h1>Abonos</h1>
-    <a class="btn btn-primary" href='{{url("/prestamos/{$prestamo->id_prestamo}/abonos/agregar")}}'>Agregar</a>
-</div>
-
-<div class="card p-4">
-    <div class="table-responsive">
-        <table class="table" id="maintable">
-            <thead>
-                <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">NUM DE ABONO</th>
-                    <th scope="col">FECHA</th>
-                    <th scope="col">MONTO CAPITAL</th>
-                    <th scope="col">MONTO INTERES</th>
-                    <th scope="col">MONTO COBRADO</th>
-                    <th scope="col">SALDO PENDIENTE</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($abonos as $index => $abono)
-                    <tr>
-                        <td class="text-center">{{ $abono->id_abono }}</td>
-                        <td class="text-center">{{ $index + 1 }}</td>
-                        <td class="text-center">{{ $abono->fecha }}</td>
-                        <td class="text-center">{{ number_format($abono->monto_capital, 2) }}</td>
-                        <td class="text-center">{{ number_format($abono->monto_otros, 2) }}</td> 
-                        <td class="text-center">{{ number_format($abono->monto_capital + $abono->monto_otros, 2) }}</td> 
-                        <td class="text-center">{{ number_format($abono->saldo_pendiente, 2) }}</td> 
-                    </tr>
-                @endforeach
-            </tbody>
-            <tfoot>
-                <tr>
-                    <th colspan="3" class="text-right">TOTAL</th>
-                    <th class="text-center" id="totalCapital"></th>
-                    <th class="text-center" id="totalInteres"></th>
-                    <th class="text-center" id="totalCobrado"></th>
-                    <th></th>
-                </tr>
-            </tfoot>
-        </table>
+    <div class = "row card-body">
+        <div class = "col-2">Id Prestamo</div>
+        <div class = "col-2"> {{$prestamo->id_prestamo}}</div>
+        <div class = "col-2">Fecha Aprobacion</div>
+        <div class = "col-2">{{$prestamo->fecha_aprob}}</div>
+        <div class = "col-2">Monto Prestado</div>
+        <div class = "col-2">{{$prestamo->monto}}</div>
     </div>
 </div>
+
+<div class = "row my-3">
+    <div class = "col">
+        <h2>Abonos</h2>
+    </div>
+    <div class = "col-auto">
+        <a class = "btn btn-primary" href = '{{url("/prestamos/{$prestamo->id_prestamo}/abonos/agregar")}}'>Agregar</a>
+    </div>
+</div>
+<table class = "table" id = "maintable">
+<thead>
+    <tr>
+        <th scope = "col">ID</th>
+        <th scope = "col">NUM DE ABONO</th>
+        <th scope = "col">FECHA</th>
+        <th scope = "col">MONTO CAPITAL</th>
+        <th scope = "col">MONTO INTERES</th>
+        <th scope = "col">MONTO COBRADO</th>
+        <th scope = "col">SALDO PENDIENTE</th>
+    </tr>
+</thead>
+<tbody>
+@foreach ($abonos as $abono)
+    <tr>
+        <td>{{$abono->id_abono}}</td>
+        <td class = "text-center">
+            {{$abono->num_abono}}
+        </td>
+        <td class = "text-end">
+            {{number_format($abono->monto_capital, 2)}}
+        </td>
+        <td class = "text-end">
+            {{number_format($abono->monto_interes, 2)}}
+        </td>
+        <td class = "text-end">
+            {{number_format($abono->monto_cobrado, 2)}}
+        </td>
+        <td class = "text-end">
+            {{number_format($abono->saldo_pendiente, 2)}}
+        </td>
+    </tr>
+@endforeach
+</tbody>
+<tfoot>
+    <tr>
+        <td colspan = "3" class = "text-end fw-bold">Total</td>
+        <td class = "text-end">{{number_format(array_sum(array_column($abonos, "monto_capital")), 2)}} </td>
+        <td class = "text-end">{{number_format(array_sum(array_column($abonos, "monto_interes")), 2)}}</td>
+        <td class = "text-end">{{number_format(array_sum(array_column($abonos, "monto_cobrado")),2 )}}</td>
+    </tr>
+</tfoot>
+</table>
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        let totalCapital = 0, totalInteres = 0, totalCobrado = 0;
-        
-        document.querySelectorAll("#maintable tbody tr").forEach(row => {
-            totalCapital += parseFloat(row.cells[3].textContent.replace(/,/g, '')) || 0;
-            totalInteres += parseFloat(row.cells[4].textContent.replace(/,/g, '')) || 0;
-            totalCobrado += parseFloat(row.cells[5].textContent.replace(/,/g, '')) || 0;
-        });
-
-        document.getElementById("totalCapital").textContent = totalCapital.toLocaleString(undefined, {minimumFractionDigits: 2});
-        document.getElementById("totalInteres").textContent = totalInteres.toLocaleString(undefined, {minimumFractionDigits: 2});
-        document.getElementById("totalCobrado").textContent = totalCobrado.toLocaleString(undefined, {minimumFractionDigits: 2});
-    });
+    let table = document.getElementById("maintable")
+    let datatable = new DataTable(table,{paging:true, searching:true})
 </script>
 @endsection

@@ -39,9 +39,9 @@ Route::post ("/movimientos/prestamos/agregar", [MovimientosController::class, "p
 Route::get('/abonos/resumen', [CatalogosController::class, 'resumen'])->name('abonos.resumen');
 
 //Abonos
-Route::get ('/prestamos/{prest}/abonos', [MovimientosController::class, "abonosGet"]) -> where ("prest", "\\d+");
-Route::get("/prestamos/{prest}/abonos/agregar", [MovimientosController::class, "abonosAgregarGet"])->where("prest", "\\d+");
-Route::post("/prestamos/{prest}/abonos/agregar", [MovimientosController::class, "abonosAgregarPost"])->where("prest", "\\d+");
+Route::get("/prestamos/{prest}/abonos", [MovimientosController::class, "abonosGet"]) -> where("prest", "\\d+");
+Route::get("/prestamos/{prest}/abonos/agregar", [MovimientosController::class, "abonosAgregarGet"]) -> where("prest", "\\d+");
+Route::post("/prestamos/{prest}/abonos/agregar", [MovimientosController::class, "abonosAgregarPost"]) -> where("prest", "\\d+");
 
 //EmpleadosPrestamo
 Route::get ('/empleados/{id}/prestamos', [MovimientosController::class, "empleadosPrestamosGet"]) -> where ("id", "[0-9]+");

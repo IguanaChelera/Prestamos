@@ -12,7 +12,7 @@
 <div class="card p-4">
     <div class="row">
         <div class="col-2">Empleado:</div>
-        <div class="col">{{ $empleado->nombre }}</div>
+        <div class="col">{{$empleado->nombre}}</div>
     </div>
 </div>
 
@@ -30,11 +30,11 @@
     <tbody>
         @foreach($prestamos as $prestamo)
         <tr>
-            <td class="text-center">{{ $prestamo->id_prestamo }}</td>
-            <td class="text-center">{{ $prestamo->monto }}</td>
-            <td class="text-center">{{ $prestamo->fecha_ini_desc }}</td>
-            <td class="text-center">{{ $prestamo->fecha_fin_desc }}</td>
-            <td class="text-center">{{ $prestamo->estado }}</td>
+            <td class="text-center">{{$prestamo->id_prestamo}}</td>
+            <td class="text-center">{{$prestamo->monto}}</td>
+            <td class="text-center">{{$prestamo->fecha_ini_desc}}</td>
+            <td class="text-center">{{$prestamo->fecha_fin_desc}}</td>
+            <td class="text-center">{{$prestamo->estado}}</td>
             <td class="text-center">
                 <a href="{{ url("/prestamos/{$prestamo->id_prestamo}/abonos") }}">Detalles</a>
             </td>

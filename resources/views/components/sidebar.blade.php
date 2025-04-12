@@ -12,4 +12,4 @@
     <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="nav-link">Cerrar sesión</a>
 </nav>
 
-@endif
+@endif 
